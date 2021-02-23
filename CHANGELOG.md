@@ -17,7 +17,6 @@
 - Fixed missing OpenID button image.
 - Added the ability to pass the access token to the front end to support authenticating reverse proxies like [keycloak-gatekeeper](https://github.com/keycloak/keycloak-gatekeeper).
 
-
 ## 6.0.2 (2021-02-20)
 - Compatible with Taiga 6.0.2
 - Mereged work done by @cristianlazarop 

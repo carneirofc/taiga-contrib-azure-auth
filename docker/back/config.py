@@ -200,6 +200,7 @@ if ENABLE_OPENID:
     INSTALLED_APPS += [
         "taiga_contrib_openid_auth"
     ]
+    OPENID_SCOPE = os.getenv('OPENID_SCOPE')
     OPENID_USER_URL = os.getenv('OPENID_USER_URL')
     OPENID_TOKEN_URL = os.getenv('OPENID_TOKEN_URL')
     OPENID_CLIENT_ID = os.getenv('OPENID_CLIENT_ID')

@@ -1,9 +1,9 @@
 taiga-contrib-openid-auth
 =========================
-An OpenID / Keycloak Authentication Plugin. Heavily based off of
+An OpenID / Microsoft Azure Authentication Plugin.
 [taiga-contrib-github-auth](https://github.com/taigaio/taiga-contrib-github-auth).
 
-Compatible with Taiga 4.2.1, 5.x, 6
+Compatible with Taiga 6
 
 # Installation
 

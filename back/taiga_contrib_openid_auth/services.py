@@ -55,20 +55,15 @@ def openid_register(username:str, email:str, full_name:str, openid_id:int, token
             user = user_model.objects.get(email=email)
             auth_data_model.objects.create(user=user, key="openid", value=openid_id, extra={})
         except user_model.DoesNotExist:
-            if PUBLIC_REGISTER_ENABLED:
-                # Create a new user
-                username_unique = slugify_uniquely(username, user_model, slugfield="username")
-                user = user_model.objects.create(email=email,
-                                                username=username_unique,
-                                                full_name=full_name)
-                auth_data_model.objects.create(user=user, key="openid", value=openid_id, extra={})
+            # Create a new user
+            username_unique = slugify_uniquely(username, user_model, slugfield="username")
+            user = user_model.objects.create(email=email,
+                                            username=username_unique,
+                                            full_name=full_name)
+            auth_data_model.objects.create(user=user, key="openid", value=openid_id, extra={})
 
-                send_register_email(user)
-                user_registered_signal.send(sender=user.__class__, user=user)
-            else:
-                raise exc.IntegrityError(
-                _("Sorry, was unable to locate user and registrations have been disabled by the Administrator"))
-
+            send_register_email(user)
+            user_registered_signal.send(sender=user.__class__, user=user)
 
     if token:
         membership = get_membership_by_token(token)

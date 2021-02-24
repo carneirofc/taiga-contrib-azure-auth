@@ -1,4 +1,3 @@
-CIRCLE_BRANCH ?= latest
 TAIGA_FRONT_TAG ?= 6.0.5
 TAIGA_BACK_TAG ?= 6.0.5
 
@@ -10,7 +9,8 @@ LABELS += --label taiga.plugin.openid.repo="$(BUILD_GITHUB_REPO)"
 BUILD_ARGS += --build-arg BUILD_GITHUB_REPO="$(BUILD_GITHUB_REPO)"
 BUILD_ARGS += --build-arg TAIGA_BACK_TAG="$(TAIGA_BACK_TAG)"
 BUILD_ARGS += --build-arg TAIGA_FRONT_TAG="$(TAIGA_FRONT_TAG)"
-DOCKER_BUILD_OPTS = $(LABELS) $(BUILD_ARGS)
+
+DOCKER_BUILD_OPTS = $(LABELS) $(BUILD_ARGS) --no-cache
 
 DOCKER_REGISTRY ?= docker.io
 DOCKER_USER_GROUP ?= carneirofc
@@ -20,20 +20,19 @@ all: clean build
 
 clean:
 	docker system prune --filter "label=$(LABEL)" --all --force
+	docker image rm --force $(DOCKER_IMAGE_PREFIX)/taiga-back-openid:$(TAIGA_BACK_TAG)
+	docker image rm --force $(DOCKER_IMAGE_PREFIX)/taiga-front-openid:$(TAIGA_FRONT_TAG)
 
-build: build-js build-front build-back
+build: build-js build-docker
 build-js:
 	cd front && npm install && npm run build
+build-docker: build-front build-back
 build-front:
-	docker build docker/front $(DOCKER_BUILD_OPTS) -t $(DOCKER_IMAGE_PREFIX)/taiga-front-openid:$(CIRCLE_BRANCH)
-	docker build docker/front $(DOCKER_BUILD_OPTS) -t $(DOCKER_IMAGE_PREFIX)/taiga-front-openid:$(TAIGA_FRONT_TAG)
+	docker build docker/front $(DOCKER_BUILD_OPTS) --tag $(DOCKER_IMAGE_PREFIX)/taiga-front-openid:$(TAIGA_FRONT_TAG)
 
 build-back:
-	docker build docker/back $(DOCKER_BUILD_OPTS) -t $(DOCKER_IMAGE_PREFIX)/taiga-back-openid:$(CIRCLE_BRANCH)
-	docker build docker/back $(DOCKER_BUILD_OPTS) -t $(DOCKER_IMAGE_PREFIX)/taiga-back-openid:$(TAIGA_BACK_TAG)
+	docker build docker/back $(DOCKER_BUILD_OPTS) --tag $(DOCKER_IMAGE_PREFIX)/taiga-back-openid:$(TAIGA_BACK_TAG)
 	
 publish:
-	docker push $(DOCKER_IMAGE_PREFIX)/taiga-back-openid:$(CIRCLE_BRANCH)
 	docker push $(DOCKER_IMAGE_PREFIX)/taiga-back-openid:$(TAIGA_BACK_TAG)
-	docker push $(DOCKER_IMAGE_PREFIX)/taiga-front-openid:$(CIRCLE_BRANCH)
 	docker push $(DOCKER_IMAGE_PREFIX)/taiga-front-openid:$(TAIGA_FRONT_TAG)

@@ -21,9 +21,10 @@ all: clean build
 clean:
 	docker system prune --filter "label=$(LABEL)" --all --force
 
-build: build-front build-back
-build-front:
+build: build-js build-front build-back
+build-js:
 	cd front && npm install && npm run build
+build-front:
 	docker build docker/front $(DOCKER_BUILD_OPTS) -t $(DOCKER_IMAGE_PREFIX)/taiga-front-openid:$(CIRCLE_BRANCH)
 	docker build docker/front $(DOCKER_BUILD_OPTS) -t $(DOCKER_IMAGE_PREFIX)/taiga-front-openid:$(TAIGA_FRONT_TAG)
 

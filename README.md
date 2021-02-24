@@ -23,6 +23,7 @@ Use the following environmental setting to configure the frontend conf.json and 
 
 ```
 ENABLE_OPENID: "True"
+OPENID_SCOPE: "User.Read for Azure"
 OPENID_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/auth"
 OPENID_USER_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/userinfo"
 OPENID_TOKEN_URL : "https://{url-to-keycloak}/auth/realms/{realm}/protocol/openid-connect/token"

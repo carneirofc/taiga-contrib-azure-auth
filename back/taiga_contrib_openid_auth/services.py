@@ -87,7 +87,6 @@ def openid_login_func(request):
     token = request.DATA.get('token', None)
     accessToken = request.DATA.get('access_token', None)
     redirect_uri = request.DATA.get('url', None)
-
     user_info = connector.me(code, accessToken, redirect_uri)
     user = openid_register(username=user_info.username,
                            email=user_info.email,
